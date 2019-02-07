@@ -23,6 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <surefire.version>2.22.0</surefire.version>
     </properties>
 
     <dependencies>
@@ -47,6 +48,16 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${surefire.version}</version>
+            </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -80,13 +91,12 @@
         </repository>
     </distributionManagement>
 
+
+    <inceptionYear>2016</inceptionYear>
     <organization>
         <name>Metro Labs LLC</name>
         <url>http://metrolabs.io/</url>
     </organization>
-
-    <inceptionYear>2016</inceptionYear>
-
     <developers>
         <developer>
             <id>metro.io</id>
