@@ -214,4 +214,6 @@ public class Filter {
         }
         throw new SpecificationException("Illegal criteria logic, closing right bracket \"]\" not found");
     }
+
+    public static void main(String[] args) {}
 }
