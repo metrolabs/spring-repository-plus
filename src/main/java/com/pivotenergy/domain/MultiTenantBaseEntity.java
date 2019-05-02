@@ -31,13 +31,13 @@ public abstract class MultiTenantBaseEntity<T> extends BaseEntity<T> implements 
 
     @PrePersist
     public void methodInvokedBeforePersist() {
-        log.info(String.join("Invoked before persisting {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked before persisting %s", this.getClass().getSimpleName()));
         setTenantGroupId();
     }
 
     @PreUpdate
     public void methodInvokedBeforeUpdate() {
-        log.info(String.join("Invoked before updating {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked before updating %s", this.getClass().getSimpleName()));
         setTenantGroupId();
     }
 
@@ -46,7 +46,7 @@ public abstract class MultiTenantBaseEntity<T> extends BaseEntity<T> implements 
         if (auth != null && auth.isAuthenticated() && auth instanceof JWTAuthentication) {
             if(null != auth.getPrincipal() && auth.getPrincipal() instanceof JWTPrincipal) {
                 this.groupId = ((JWTPrincipal) auth.getPrincipal()).getOBOGroupIdOrUserGroupId();
-                log.info(String.join("Setting groupId={}", this.groupId));
+                log.info(String.format("Setting groupId=%s", this.groupId));
             }
         }
     }

@@ -145,31 +145,31 @@ public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializ
 
     @PrePersist
     public void methodInvokedBeforePersist() {
-        log.info(String.join("Invoked before persisting {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked before persisting %s", this.getClass().getSimpleName()));
     }
 
     @PostPersist
     public void methodInvokedAfterPersist() {
-        log.info(String.join("Invoked after persisting {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked after persisting %s", this.getClass().getSimpleName()));
     }
 
     @PreUpdate
     public void methodInvokedBeforeUpdate() {
-        log.info(String.join("Invoked before updating {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked before updating %s", this.getClass().getSimpleName()));
     }
 
     @PostUpdate
     public void methodInvokedAfterUpdate() {
-        log.info(String.join("Invoked after updating {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked after updating %s", this.getClass().getSimpleName()));
     }
 
     @PreRemove
     public void methodInvokedBeforeRemove() {
-        log.info(String.join("Invoked before removing {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked before removing %s", this.getClass().getSimpleName()));
     }
 
     @PostRemove
     public void methodInvokedAfterRemove() {
-        log.info(String.join("Invoked after removing {}", this.getClass().getSimpleName()));
+        log.info(String.format("Invoked after removing %s", this.getClass().getSimpleName()));
     }
 }
