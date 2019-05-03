@@ -21,7 +21,6 @@
 package com.pivotenergy.domain.building;
 
 import com.pivotenergy.domain.MultiTenantBaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import com.pivotenergy.model.location.LocationAddress;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
@@ -38,7 +37,6 @@ import java.util.Set;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class Building extends MultiTenantBaseEntity<Building> {
 
     @NotBlank

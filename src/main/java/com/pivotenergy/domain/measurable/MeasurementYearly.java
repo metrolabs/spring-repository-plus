@@ -22,7 +22,6 @@ package com.pivotenergy.domain.measurable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -32,7 +31,6 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings({"unused", "WeakerAccess"})
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class MeasurementYearly extends MultiTenantBaseEntity<MeasurementYearly> {
     @Id
     @Column(name = "id", nullable = false, length = 128)

@@ -34,7 +34,6 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Measure extends MultiTenantBaseEntity<Measure> {
 
     @Column(name = "name", nullable = false)

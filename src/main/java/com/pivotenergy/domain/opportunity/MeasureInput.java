@@ -21,7 +21,6 @@
 package com.pivotenergy.domain.opportunity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
@@ -31,7 +30,6 @@ import javax.persistence.*;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class MeasureInput extends MultiTenantBaseEntity<MeasureInput> {
     @NotBlank
     @Column(name = "input_id", nullable = false, length = 128)

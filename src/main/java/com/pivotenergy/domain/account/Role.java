@@ -22,7 +22,6 @@ package com.pivotenergy.domain.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.Assert;
@@ -33,7 +32,6 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class Role extends MultiTenantBaseEntity<Role> {
     @NotBlank
     @Column(name = "role", nullable = false, length = 128)

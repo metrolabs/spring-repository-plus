@@ -36,7 +36,6 @@ import java.util.*;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class Measurable extends MultiTenantBaseEntity<Measurable> {
 
     @Column(name = "building_id", nullable = false, length = 128)

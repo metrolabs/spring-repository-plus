@@ -23,7 +23,6 @@ package com.pivotenergy.domain.building;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -32,7 +31,6 @@ import javax.persistence.*;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class ExternalIdentifier extends MultiTenantBaseEntity<ExternalIdentifier> {
 
     @NotBlank

@@ -21,20 +21,17 @@
 package com.pivotenergy.domain.measurable;
 
 import com.pivotenergy.domain.BaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.validation.constraints.Past;
 import java.util.Date;
 
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class ClimateDataHourly extends BaseEntity<ClimateDataHourly> {
     @org.springframework.data.annotation.Id
     @Column(name = "id", nullable = false, length = 128)

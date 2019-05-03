@@ -22,7 +22,6 @@ package com.pivotenergy.domain.measurable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Range;
@@ -35,7 +34,6 @@ import java.sql.Timestamp;
 @SuppressWarnings({"unused", "WeakerAccess"})
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class MeasurementRawReading extends MultiTenantBaseEntity<MeasurementRawReading> {
     @Id
     @Column(name = "id", nullable = false, length = 128)

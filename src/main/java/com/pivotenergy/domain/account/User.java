@@ -22,7 +22,6 @@ package com.pivotenergy.domain.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -40,7 +39,6 @@ import java.util.Set;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class User extends MultiTenantBaseEntity<User> {
     private static final PasswordEncoder ENCODER = new BCryptPasswordEncoder();
 

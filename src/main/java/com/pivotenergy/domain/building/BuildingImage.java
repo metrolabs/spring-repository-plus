@@ -2,7 +2,6 @@ package com.pivotenergy.domain.building;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.hibernate.validator.constraints.NotBlank;
@@ -13,7 +12,6 @@ import javax.persistence.*;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class BuildingImage extends MultiTenantBaseEntity<BuildingImage> {
 
     @Column(name = "`url`", unique = true)

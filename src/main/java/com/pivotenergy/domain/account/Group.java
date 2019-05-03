@@ -21,7 +21,6 @@
 package com.pivotenergy.domain.account;
 
 import com.pivotenergy.domain.BaseEntity;
-import com.pivotenergy.domain.SecurityAuditorAware;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -36,7 +35,6 @@ import java.util.Set;
 @SuppressWarnings("unused")
 @Entity
 @NoArgsConstructor
-@EntityListeners(SecurityAuditorAware.class)
 public class Group extends BaseEntity<Group> {
     @Size(min = 4, message="The group name must be at least 4 character long")
     @NotBlank(message="The group name cannot be empty")

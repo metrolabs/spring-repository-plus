@@ -10,13 +10,16 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 @Log4j
 public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializable {
 
@@ -28,12 +31,22 @@ public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializ
     @Column(name = "id", nullable = false, length = 128)
     protected String id;
     protected Boolean deleted = false;
+
+    @NotNull
     @CreatedDate
-    protected LocalDateTime createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date createdAt;
+
+    @NotNull
     @CreatedBy
     protected String createdBy;
+
+    @NotNull
     @LastModifiedDate
-    protected LocalDateTime updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    protected Date updatedAt;
+
+    @NotNull
     @LastModifiedBy
     protected String updatedBy;
 
@@ -61,7 +74,7 @@ public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializ
     }
 
     @Override
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
@@ -71,7 +84,7 @@ public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializ
     }
 
     @Override
-    public LocalDateTime getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
@@ -80,7 +93,7 @@ public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializ
         return updatedBy;
     }
 
-    public T setCreatedAt(LocalDateTime createdAt) {
+    public T setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
         //noinspection unchecked
         return (T) this;
@@ -92,7 +105,7 @@ public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializ
         return (T) this;
     }
 
-    public T setUpdatedAt(LocalDateTime updatedAt) {
+    public T setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
         //noinspection unchecked
         return (T) this;
@@ -145,31 +158,31 @@ public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializ
 
     @PrePersist
     public void methodInvokedBeforePersist() {
-        log.info(String.format("Invoked before persisting %s", this.getClass().getSimpleName()));
+        log.debug(String.format("Invoked before persisting %s", this.getClass().getSimpleName()));
     }
 
     @PostPersist
     public void methodInvokedAfterPersist() {
-        log.info(String.format("Invoked after persisting %s", this.getClass().getSimpleName()));
+        log.debug(String.format("Invoked after persisting %s", this.getClass().getSimpleName()));
     }
 
     @PreUpdate
     public void methodInvokedBeforeUpdate() {
-        log.info(String.format("Invoked before updating %s", this.getClass().getSimpleName()));
+        log.debug(String.format("Invoked before updating %s", this.getClass().getSimpleName()));
     }
 
     @PostUpdate
     public void methodInvokedAfterUpdate() {
-        log.info(String.format("Invoked after updating %s", this.getClass().getSimpleName()));
+        log.debug(String.format("Invoked after updating %s", this.getClass().getSimpleName()));
     }
 
     @PreRemove
     public void methodInvokedBeforeRemove() {
-        log.info(String.format("Invoked before removing %s", this.getClass().getSimpleName()));
+        log.debug(String.format("Invoked before removing %s", this.getClass().getSimpleName()));
     }
 
     @PostRemove
     public void methodInvokedAfterRemove() {
-        log.info(String.format("Invoked after removing %s", this.getClass().getSimpleName()));
+        log.debug(String.format("Invoked after removing %s", this.getClass().getSimpleName()));
     }
 }

@@ -1,10 +1,10 @@
 package com.pivotenergy.domain;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public interface Auditable<T> {
-    LocalDateTime getCreatedAt();
+    Date getCreatedAt();
     String getCreatedBy();
-    LocalDateTime getUpdatedAt();
+    Date getUpdatedAt();
     String getUpdatedBy();
 }

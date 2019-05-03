@@ -66,7 +66,6 @@ public class DomainModelTest {
         Measure measure = new Measure();
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        log.info(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(measure));
         PackageSimulationResult result = packageSimulationResultRepository.findOne(id);
 
         Outcomes outcomes = toOpportunityOutcomes(result);
