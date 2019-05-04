@@ -22,15 +22,27 @@ package com.pivotenergy.domain.opportunity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("unused")
 @Entity
+@Getter
 @NoArgsConstructor
 public class MeasureInput extends MultiTenantBaseEntity<MeasureInput> {
+    @NotBlank
+    @Column(length = 128)
+    private String assetId;
+
+    @NotNull
+    @Column(length = 128)
+    @Enumerated(value=EnumType.STRING)
+    private Type assetType;
+
     @NotBlank
     @Column(name = "input_id", nullable = false, length = 128)
     private String inputId;
@@ -40,11 +52,11 @@ public class MeasureInput extends MultiTenantBaseEntity<MeasureInput> {
     private String inputKey;
 
     @NotBlank
-    @Column(name = "prior_value", nullable = false, length = 256)
+    @Column(name = "prior_value", nullable = false, length = 1024)
     private String priorValue;
 
     @NotBlank
-    @Column(name = "retrofit_value", nullable = false, length = 256)
+    @Column(name = "retrofit_value", nullable = false, length = 1024)
     private String retrofitValue;
 
     @NotBlank
@@ -61,16 +73,21 @@ public class MeasureInput extends MultiTenantBaseEntity<MeasureInput> {
 
     /**
      *
+     * @param assetId the asset this input belongs too, @see #Type
+     * @param assetType the asset type
      * @param inputId the models unique input id
+     * @param inputKey the models canonical name of the input
      * @param priorValue the pre-retrofit model value
      * @param retrofitValue the post-retrofit model value
      * @param modelSystem the system retrofitted
      * @param modelComponent the sub-system retrofitted
-     * @param inputKey the models canonical name of the input
      * @param measure the measure this input is a part of
      */
-    public MeasureInput(String inputId, String inputKey, String priorValue, String retrofitValue, String modelSystem,
+    public MeasureInput(String assetId, Type assetType, String inputId, String inputKey,
+                        String priorValue, String retrofitValue, String modelSystem,
                         String modelComponent, Measure measure) {
+        this.assetId = assetId;
+        this.assetType = assetType;
         this.inputId = inputId;
         this.priorValue = priorValue;
         this.retrofitValue = retrofitValue;
@@ -80,31 +97,12 @@ public class MeasureInput extends MultiTenantBaseEntity<MeasureInput> {
         this.measure = measure;
     }
 
-    public String getInputId() {
-        return inputId;
-    }
 
-    public String getInputKey() {
-        return inputKey;
-    }
-
-    public String getPriorValue() {
-        return priorValue;
-    }
-
-    public String getRetrofitValue() {
-        return retrofitValue;
-    }
-
-    public String getModelSystem() {
-        return modelSystem;
-    }
-
-    public String getModelComponent() {
-        return modelComponent;
-    }
-
-    public Measure getMeasure() {
-        return measure;
+    public enum Type {
+        BUILDING,
+        ROOF,
+        WALL,
+        WINDOW,
+        ZONE
     }
 }

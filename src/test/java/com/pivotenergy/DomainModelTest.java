@@ -1,15 +1,15 @@
 package com.pivotenergy;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.pivotenergy.domain.account.Role;
 import com.pivotenergy.domain.account.User;
+import com.pivotenergy.domain.opportunity.HealthFactorType;
+import com.pivotenergy.domain.opportunity.InfrastructureImpactType;
+import com.pivotenergy.domain.opportunity.PerformanceImpactType;
+import com.pivotenergy.domain.opportunity.TenantImpactType;
 import com.pivotenergy.domain.opportunity.*;
-import com.pivotenergy.domain.simulation.model.EnergyUseCalculation;
-import com.pivotenergy.domain.simulation.model.MeasureSimulationResults;
-import com.pivotenergy.domain.simulation.model.PackageSimulationResult;
-import com.pivotenergy.domain.simulation.model.SimulationResults;
+import com.pivotenergy.domain.simulation.model.*;
 import com.pivotenergy.security.JWTAuthentication;
 import com.pivotenergy.security.JWTPrincipal;
 import lombok.extern.log4j.Log4j;
@@ -24,10 +24,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -44,10 +41,15 @@ public class DomainModelTest {
     @Autowired
     OpportunityRepository opportunityRepository;
 
+    static ObjectMapper mapper = new ObjectMapper();
+    static {
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+    }
+
     @Test
     @Rollback(false)
     @Commit
-    public void find_package_simulation_result_by_id() throws JsonProcessingException {
+    public void find_package_simulation_result_by_id() {
         User user = new User()
                 .setFirstName("Test")
                 .setLastName("User")
@@ -58,14 +60,13 @@ public class DomainModelTest {
                 .setLocked(false)
                 .setEmail("TEST_ACCOUNT@TEST_GROUP.COM")
                 .setPassword("Password");
+
         user.getRoles().add(new Role().setRole(Role.Scope.ROLE_ADMIN, Role.Action.ADMIN, Role.Target.GLOBAL));
         JWTAuthentication jwtAuthentication = new JWTAuthentication(new JWTPrincipal(user), user.getPassword(), user.getRoles());
         SecurityContextHolder.getContext().setAuthentication(jwtAuthentication);
 
         String id = "3bb21678-88ed-4e50-9ed5-0e300f5cbb22-PACKAGE_7D632C00";
-        Measure measure = new Measure();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
         PackageSimulationResult result = packageSimulationResultRepository.findOne(id);
 
         Outcomes outcomes = toOpportunityOutcomes(result);
@@ -107,6 +108,8 @@ public class DomainModelTest {
                 .stream()
                 .map(x -> toMeasure(x, opportunity))
                 .collect(Collectors.toSet());
+
+
 
         opportunity
                 .setMeasures(measures)
@@ -377,6 +380,87 @@ public class DomainModelTest {
                 null,
                 opportunity);
 
-        return measure.setMonthlyDisaggregation(toMonthlyMeasureDisaggregationSet(result, measure));
+        measure
+                .setMonthlyDisaggregation(toMonthlyMeasureDisaggregationSet(result, measure))
+                .setInputs(toMeasureInputSet(measure, result));
+
+
+        return measure;
+    }
+
+    Set<MeasureInput> toMeasureInputSet(final Measure measure, MeasureSimulationResults result) {
+        Set<MeasureInput> measureInputs = new HashSet<>();
+        measureInputs.addAll(
+                result.getBuildingChanges()
+                .entrySet()
+                .stream()
+                .map(x -> toMeasureInput(measure, x.getKey(), MeasureInput.Type.WALL, x.getValue()))
+                .collect(Collectors.toSet()));
+
+        measureInputs.addAll(
+                result.getRoofChanges()
+                .entrySet()
+                .stream()
+                .map(x -> toMeasureInputSet(measure, x.getKey(), MeasureInput.Type.ZONE, x.getValue()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet()));
+
+        measureInputs.addAll(
+                result.getWallChanges()
+                .entrySet()
+                .stream()
+                .map(x -> toMeasureInputSet(measure, x.getKey(), MeasureInput.Type.ZONE, x.getValue()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet()));
+
+        measureInputs.addAll(
+                result.getWindowChanges()
+                .entrySet()
+                .stream()
+                .map(x -> toMeasureInputSet(measure, x.getKey(), MeasureInput.Type.ZONE, x.getValue()))
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toSet()));
+
+        measureInputs.addAll(
+                result.getZoneChanges()
+                .entrySet()
+                .stream()
+                .map(x -> toMeasureInputSet(measure, x.getKey(), MeasureInput.Type.ZONE, x.getValue()))
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toSet()));
+
+        return measureInputs;
+    }
+
+    Set<MeasureInput> toMeasureInputSet(final Measure measure, final String key, final MeasureInput.Type type,
+                                     Map<String, RetrofitInput> map) {
+        return map.entrySet().stream()
+                .map(x -> toMeasureInput(measure, key, type, x.getValue()))
+                .collect(Collectors.toSet());
+    }
+
+    MeasureInput toMeasureInput(Measure measure, String assetId, MeasureInput.Type type, RetrofitInput retrofitInput) {
+        /**
+         *
+         * @param assetId the asset this input belongs too, @see #Type
+         * @param assetType the asset type
+         * @param inputId the models unique input id
+         * @param inputKey the models canonical name of the input
+         * @param priorValue the pre-retrofit model value
+         * @param retrofitValue the post-retrofit model value
+         * @param modelSystem the system retrofitted
+         * @param modelComponent the sub-system retrofitted
+         * @param measure the measure this input is a part of
+         */
+        return new MeasureInput(
+                assetId,
+                type,
+                retrofitInput.getId(),
+                retrofitInput.getKey(),
+                String.valueOf(retrofitInput.getBaselineValue()),
+                String.valueOf(retrofitInput.getRetrofitValue()),
+                retrofitInput.getSystem(),
+                retrofitInput.getComponent(),
+                measure);
     }
 }

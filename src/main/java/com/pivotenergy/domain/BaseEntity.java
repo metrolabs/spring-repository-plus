@@ -20,6 +20,7 @@ import java.util.Date;
 @SuppressWarnings({"unused", "WeakerAccess"})
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@ExposeId
 @Log4j
 public abstract class BaseEntity<T> implements Entity<T>, Auditable<T>, Serializable {
 

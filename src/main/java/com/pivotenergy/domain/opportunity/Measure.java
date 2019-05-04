@@ -22,7 +22,6 @@ package com.pivotenergy.domain.opportunity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pivotenergy.domain.MultiTenantBaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -401,6 +400,11 @@ public class Measure extends MultiTenantBaseEntity<Measure> {
 
     public Measure setMonthlyDisaggregation(Set<MonthlyMeasureDisaggregation> monthlyDisaggregation) {
         this.monthlyDisaggregation = monthlyDisaggregation;
+        return this;
+    }
+
+    public Measure setInputs(Set<MeasureInput> inputs) {
+        this.inputs = inputs;
         return this;
     }
 
